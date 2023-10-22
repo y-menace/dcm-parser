@@ -1,0 +1,12 @@
+{{ param.token_string }}{{ param.name }} {{ param.size }}
+{% if param.langname %}  LANGNAME "{{ param.langname }}"
+{% endif -%}
+{% if param.funktion %}  FUNKTION "{{ param.funktion }}"
+{% endif -%}
+{% if param.displayname %}  DISPLAYNAME {{ param.displayname }}
+{% endif -%}
+{% if param.einheit_w %}  EINHEIT_W "{{ param.einheit_w }}"
+{% endif -%}
+{% for i in range(0, param.wert|length, param.values_per_line) %}  WERT    {% for value in param.wert[i:i+param.values_per_line] %}{{ format_value(value)}}   {% endfor %} 
+{% endfor -%}
+END

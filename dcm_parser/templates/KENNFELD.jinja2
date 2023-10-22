@@ -1,0 +1,26 @@
+KENNFELD {{ param.name }} {{ param.size[0] }} {{ param.size[1] }}
+{% if param.langname %}  LANGNAME "{{ param.langname }}"
+{% endif -%}
+{% if param.funktion %}  FUNKTION {{ param.funktion }}
+{% endif -%}
+{% if param.displayname %}  DISPLAYNAME {{ param.displayname }}
+{% endif -%}
+{% if param.einheit_x %}  EINHEIT_X "{{ param.einheit_x }}"
+{% endif -%}
+{% if param.einheit_y %}  EINHEIT_Y "{{ param.einheit_y }}"
+{% endif -%}
+{% if param.einheit_w %}  EINHEIT_W "{{ param.einheit_w }}"
+{% endif -%}
+{% for i in range(0, param.st_x|length, param.values_per_line) %}  ST/X{% for value in param.st_x[i:i+param.values_per_line] %}   {{ format_value(value)}}{% endfor %}
+{% endfor -%}
+{% set size0 = param.size[0]|int -%}
+{% for index in range(param.st_y|length) -%}
+{{ '  ST/Y'}}   {{ "%.5g"|format(param.st_y[index]) }}
+{% set start_index = index*size0 -%}
+{% set end_index = start_index + size0 -%}
+{% set relevant_param = param.wert[start_index:end_index] -%}
+{% for count,i in enumerate(range(0, relevant_param|length, param.values_per_line)) -%}
+{{ '  WERT'}}{% for value in relevant_param[i:i+param.values_per_line] %}   {{format_value(value)}}{% endfor %}
+{% endfor -%}
+{% endfor %}
+END

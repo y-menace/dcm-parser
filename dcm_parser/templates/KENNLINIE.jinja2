@@ -1,0 +1,18 @@
+KENNLINIE {{ param.name }} {{ param.size[0] }} {{ param.size[1] }}
+{% if param.langname %}  LANGNAME "{{ param.langname }}"
+{% endif -%}
+{% if param.funktion %}  FUNKTION {{ param.funktion }}
+{% endif -%}
+{% if param.displayname %}  DISPLAYNAME {{ param.displayname }}
+{% endif -%}
+{% if param.einheit_x %}  EINHEIT_X "{{ param.einheit_x }}"
+{% endif -%}
+{% if param.einheit_y %}  EINHEIT_Y "{{ param.einheit_y }}"
+{% endif -%}
+{% if param.einheit_w %}  EINHEIT_W "{{ param.einheit_w }}"
+{% endif -%}
+{% for i in range(0, param.st_x|length, param.values_per_line) %}  ST/X   {% for value in param.st_x[i:i+param.values_per_line] %}{{ format_value(value)}}   {% endfor %}
+{% endfor -%}
+{% for i in range(0, param.wert|length, param.values_per_line) %}  WERT   {% for value in param.wert[i:i+param.values_per_line] %}{{ format_value(value)}}   {% endfor %}
+{% endfor -%}
+END
