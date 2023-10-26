@@ -1,7 +1,7 @@
-{{ param.token_string }}{{ param.name }} {{ param.size }}
+{{ param.token_string }}{{ param.name }} {{ param.size[0] }}
 {% if param.langname %}  LANGNAME "{{ param.langname }}"
 {% endif -%}
-{% if param.funktion %}  FUNKTION "{{ param.funktion }}"
+{% if param.funktion %}  FUNKTION {{ param.funktion }}
 {% endif -%}
 {% if param.displayname %}  DISPLAYNAME {{ param.displayname }}
 {% endif -%}

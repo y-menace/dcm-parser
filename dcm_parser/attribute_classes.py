@@ -1,9 +1,12 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict, Tuple
 import re
 from pathlib import Path as path
 from jinja2 import Environment, FileSystemLoader
 from jinja2.exceptions import TemplateNotFound
+import logging
+
+
 
 # Load Jinja2 templates from a directory named 'templates'
 class Tempaltes():
@@ -49,7 +52,45 @@ class BaseParam(Tempaltes):
             template_name = self.__class__.__bases__[0].__name__ + '.jinja2'
             template = self.env.get_template(template_name)       
         return template.render(param=self,enumerate=enumerate,format_value=format_value)
-    
+
+    def _relative_difference(self,a, b):
+        if a == b == 0:
+            return 0
+        return abs(a - b) / max(abs(a), abs(b))
+
+    def update_from_and_report_changes(self, other: "BaseParam"):
+        attributes = ['wert', 'size', 'st_x', 'st_y']
+        changes = {}
+
+        for attr in attributes:
+            if hasattr(self, attr) and hasattr(other, attr):
+                current_list = getattr(self, attr)
+                other_list = getattr(other, attr)
+                
+                # Ensure both lists have the same length, else there might be structural changes.
+                if len(current_list) != len(other_list):
+                    changes[attr] = (current_list, other_list)
+                    setattr(self, attr, other_list)
+                    continue
+                
+                updated_list = []
+                for current_value, other_value in zip(current_list, other_list):
+                    # If the values are within the acceptable difference range, use the current value.
+                    if self._relative_difference(current_value, other_value) < 0.01 or abs(current_value - other_value) < 0.001:
+                        updated_list.append(current_value)
+                    else:  # Else, use the other's value and log the change
+                        updated_list.append(other_value)
+                        if attr not in changes:
+                            changes[attr] = ([], [])  # Initialize with empty lists
+                        changes[attr][0].append(current_value)
+                        changes[attr][1].append(other_value)
+
+                setattr(self, attr, updated_list)
+
+        return changes
+
+
+
     def process_wert(self,arary_values):
         '''
         Make wert into the required format
@@ -64,12 +105,14 @@ class BaseParam(Tempaltes):
                 # If the conversion fails, append the original string element 
                 new_wert.append(x)  # add to log later
         return new_wert
+    
 @dataclass 
 class ParamsWithWert(BaseParam):
     wert: List[Union[str, float, int]] = field(default_factory=list)
 
     def __post_init__(self):
         self.wert = self.process_wert(self.wert)
+
 @dataclass
 class FESTWERT(ParamsWithWert):
     text: str = ''
@@ -78,7 +121,7 @@ class FESTWERT(ParamsWithWert):
 
 @dataclass
 class FESTWERTEBLOCK(ParamsWithWert):
-    size: int = 1
+    size: List[int] = field(default_factory=list)
     wert: List[float] = field(default_factory=list)
     token_string: str = 'FESTWERTEBLOCK '
 
@@ -94,7 +137,7 @@ class ParamWithSTX(ParamsWithWert):
 
 @dataclass
 class KENNLINIE(ParamWithSTX):
-    size: int = 1
+    size:  List[int] = field(default_factory=list)
     einheit_x: str = ''
     token_string: str = 'KENNLINIE '
 
@@ -129,7 +172,7 @@ class GRUPPENKENNFELD(KENNFELD):
 
 @dataclass
 class STUETZSTELLENVERTEILUNG(BaseParam):
-    size: int = 1 
+    size:  List[int] = field(default_factory=list)
     einheit_x: str = ''
     st_x: List[float] = field(default_factory=list)
     token_string: str = 'STUETZSTELLENVERTEILUNG '
@@ -158,10 +201,11 @@ class DCMObject():
             f"\n"
             f"KONSERVIERUNG_FORMAT {self.format_spec_version}"
             f"\n"
-        ]        
-        str_repr += ['FUNKTIONEN']
-        str_repr += [str(func)  for func in self.functions]        
-        str_repr += ['END\n']
+        ] 
+        if len (self.functions)>0:
+            str_repr += ['FUNKTIONEN']
+            str_repr += [str(func)  for func in self.functions]        
+            str_repr += ['END\n']
         str_repr += [str(param) + '\n' for param in self.parameters]
         str_repr += [str(block) + '\n' for block in self.parameter_block]
         str_repr += [str(curve) + '\n' for curve in self.characteristic_curve]
@@ -173,3 +217,42 @@ class DCMObject():
         str_repr += [str(dist) + '\n' for dist in self.distribution]
 
         return "\n".join(str_repr)
+        
+    def update_from(self, other: "DCMObject", ignore_list=[], logger=None):
+        updated_names = []
+        missing_names = []
+        attributes_to_update = ['parameters', 'parameter_block', 'characteristic_curve', 'characteristic_curve_fixed',
+                                'characteristic_curve_group', 'characteristic_map', 'characteristic_map_fixed',
+                                'characteristic_map_group', 'distribution']
+
+        for attr in attributes_to_update:
+            self_attr = getattr(self, attr)
+            other_attr = getattr(other, attr)
+
+            # Create a dictionary for quick name-based lookup for both self and other objects
+            self_name_to_obj = {obj.name: obj for obj in self_attr}
+            other_name_to_obj = {obj.name: obj for obj in other_attr}
+
+            for other_name, other_param in other_name_to_obj.items():
+                # Skip the names present in the ignore list
+                if other_name in ignore_list:
+                    continue
+
+                # If the parameter is found in self, then update it
+                if other_name in self_name_to_obj:
+                    self_param = self_name_to_obj[other_name]
+                    attributes_changed = self_param.update_from_and_report_changes(other_param)
+                    if attributes_changed and logger:  
+                        for attribute, (original_value, updated_value) in attributes_changed.items():
+                            logger.info(f"Name: {other_name}, Attribute: {attribute}, Old : {original_value}, New : {updated_value}")
+                            updated_names.append(other_name)
+                else:
+                    missing_names.append(other_name)           
+
+        return updated_names, missing_names
+
+
+    def write(self):
+        with open (self.filePath, 'w') as fdcm:
+            fdcm.write(self.__str__())
+

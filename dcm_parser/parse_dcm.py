@@ -20,12 +20,12 @@ class DCMParser():
         'EINHEIT_W' : 'einheit_w',
         'EINHEIT_X': 'einheit_x',
         'EINHEIT_Y': 'einheit_y',
+        'TEXT': 'text'
     }
     single_line_attrs_keywords = '|'.join(single_line_attrs.keys())
-    single_line_attrs_keywords_pattern = re.compile(rf'({single_line_attrs_keywords})\s+"?(.*?)"?\s*$')
+    single_line_attrs_keywords_pattern = re.compile(rf'({single_line_attrs_keywords})\s+("?[^"\n]*"?)\s*$')
 
-    possible_multi_line_attrs= {
-        'TEXT': 'text',
+    possible_multi_line_attrs= {        
         'WERT': 'wert',
         'ST/X': 'st_x',
         'ST/Y': 'st_y',
@@ -114,21 +114,22 @@ class DCMParser():
         each line can be parsed as seperate objects
         '''
         all_objects = []
-        content = in_str[0].splitlines()
-        for line in content[1:-1]: # 1st and last line are KEYWORDS
-            match  = FUNKTIONEN.extract_regex.match(line)
-            if match:
-                function_type = match.group(1)
-                version = match.group(2)
-                description = match.group(3)
-                # print(f'Function Type: {function_type}, Version: {version}, Description: {description}')
-                curr_obj = FUNKTIONEN(function = function_type,
-                                        version = version,
-                                        description = description
-                                )
-                all_objects.append(curr_obj)        
-            else :
-                raise Exception(f'Malformed inupt for FUNKTIONEN :{line}')
+        if len(in_str) > 0:
+            content = in_str[0].splitlines()
+            for line in content[1:-1]: # 1st and last line are KEYWORDS
+                match  = FUNKTIONEN.extract_regex.match(line)
+                if match:
+                    function_type = match.group(1)
+                    version = match.group(2)
+                    description = match.group(3)
+                    # print(f'Function Type: {function_type}, Version: {version}, Description: {description}')
+                    curr_obj = FUNKTIONEN(function = function_type,
+                                            version = version,
+                                            description = description
+                                    )
+                    all_objects.append(curr_obj)        
+                else :
+                    raise Exception(f'Malformed inupt for FUNKTIONEN :{line}')
         return all_objects
     
     def process_param_chunk(self, chunk_liststr, type):
@@ -156,7 +157,7 @@ class DCMParser():
             # Adding name and size if present
             combined_attributes['name'] = name
             if size:
-                combined_attributes['size'] = size  # Convert to int or other type as required
+                combined_attributes['size'] = [int(x) for x in size]  # Convert to int or other type as required
 
             # Dynamically create an object based on the type
             param_class = next((cls for cls in self.all_param_classes if cls.token_string.strip() == type), None)
@@ -192,8 +193,9 @@ class DCMParser():
         return extracted_single_line_values, extracted_multi_line_values
 
     def get_name_size_from_first_line (self,line,type):
-        name_and_size_pattern= re.compile(rf'^{re.escape(type)}\s+([a-zA-Z0-9_]+)(?:\s+(\d+)(?:\s+(\d+))?)?')
+        name_and_size_pattern= re.compile(rf'^{re.escape(type)}\s+([a-zA-Z0-9_\.]+)(?:\s+(\d+)(?:\s+(\d+))?)?')
         match = name_and_size_pattern.match(line)
+        size = None
         if match:
             name = match.group(1)
             size1 = match.group(2)
@@ -201,7 +203,8 @@ class DCMParser():
         if not(size2 is None):
             size = [size1, size2]
         else:
-            size = size1
+            if size1:
+                size = [size1]  ## this can be None for things that are size 1
         return name,size
         
 

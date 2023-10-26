@@ -1,15 +1,15 @@
 {{ param.token_string }}{{ param.name }}
-{% if param.langname %}  LANGNAME "{{ param.langname }}"
+{% if param.langname %}  LANGNAME {{ param.langname }}
 {% endif -%}
-{% if param.funktion %}  FUNKTION "{{ param.funktion }}"
+{% if param.funktion %}  FUNKTION {{ param.funktion }}
 {% endif -%}
 {% if param.displayname %}  DISPLAYNAME {{ param.displayname }}
 {% endif -%}
-{% if param.einheit_w %}  EINHEIT_W "{{ param.einheit_w }}"
+{% if param.einheit_w %}  EINHEIT_W {{ param.einheit_w }}
 {% endif -%}
 {% if param.var %}  VAR {{ param.var }}
 {% endif -%}
-{% if param.text %}  TEXT "{{ param.text }}"
+{% if param.text %}  TEXT   {{ param.text }}
 {% else %}  WERT {{format_value(param.wert[0])}}
 {% endif -%}
 END
