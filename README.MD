@@ -6,10 +6,8 @@ Parser for DCM files [Data Conversion Format](https://www.etas.com/download-cent
 
 ### Features
 
-- **File Reading**: Efficiently read and parse DCM files.
-- **DCM Interpretation**: Translate raw DCM file content into structured data.
-- **Data Extraction**: Extract specific data sections or parameters from the DCM file.
-- **Error Handling**: Gracefully handle potential parsing errors.
+- **File Reading**: Read and parse DCM files.
+- **Create DCM Object**: Translate raw DCM file content into structured data and create a DCMObject.
 
 ### Usage
 
@@ -56,4 +54,7 @@ Parser for DCM files [Data Conversion Format](https://www.etas.com/download-cent
     ```python
     dcm_obj.cleanup_parameters()
     ```
+
+### Dependencies
+Specifeid in requirements.txt
 
