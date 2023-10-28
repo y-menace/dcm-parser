@@ -1,0 +1,86 @@
+
+
+KONSERVIERUNG_FORMAT 2.0
+
+FESTWERT cont
+  LANGNAME "speed"
+  EINHEIT_W "m / s"
+  WERT 3.1415
+END
+
+FESTWERT enum_1
+  LANGNAME ""
+  EINHEIT_W ""
+  TEXT   "first"
+END
+
+FESTWERT log
+  LANGNAME ""
+  EINHEIT_W ""
+  TEXT   "false"
+END
+
+FESTWERT sdisc
+  LANGNAME ""
+  EINHEIT_W ""
+  WERT -98
+END
+
+FESTWERT udisc_1
+  LANGNAME ""
+  EINHEIT_W ""
+  WERT 876
+END
+
+FESTWERTEBLOCK array 4
+  LANGNAME "sample temperatures"
+  WERT    0.7500   -0.2500   0.5000   1.5000    
+END
+
+KENNLINIE One_D 4 
+  ST/X   0   1   2   3   
+  WERT   0   0   0   0   
+END
+
+KENNLINIE One_D_fix 3 
+  ST/X   0   1   2   
+  WERT   -1   1.2500   3   
+END
+
+KENNLINIE One_D_group 3 
+  ST/X   1   2   3   
+  WERT   -10   1   5.9370   
+END
+
+KENNFELD Two_D 3 2
+  ST/X   0   1   2
+  ST/Y   0
+  WERT   0   0.4000   0.8000
+  ST/Y   1
+  WERT   1   2   3
+
+END
+
+KENNFELD Two_D_fix 3 2
+  ST/X   0   1   2
+  ST/Y   0
+  WERT   0   10   1000
+  ST/Y   1
+  WERT   -1   9   999
+
+END
+
+KENNFELD Two_D_group 3 3
+  ST/X   1   2   3
+  ST/Y   1
+  WERT   1   2   3
+  ST/Y   2
+  WERT   2   4   6
+  ST/Y   3
+  WERT   3   6   9
+
+END
+
+STUETZSTELLENVERTEILUNG distrib 3 
+  ST/X   1   2   3   
+END

@@ -1,0 +1,127 @@
+! This is a Sample DCM-File in KONSERVIERUNG_FORMAT 2.0
+
+KONSERVIERUNG_FORMAT 2.0
+
+FUNKTIONEN
+  FKT AdvancedParameterFunction "1.1" "Function for enhanced parameters"
+  FKT ArrayParameterFunction "2.1" "Function for array parameters"
+  FKT CurveFunction "3.1" "Function for curve functions"
+  FKT StaticCurveFunction "3.2" "Function for static curve functions"
+  FKT CollectiveCurveFunction "3.3" "Function for collective curve functions"
+  FKT MapFunction "4.1" "Function for map functions"
+  FKT StaticMapFunction "4.2" "Function for static map functions"
+  FKT CollectiveMapFunction "4.3" "Function for collective map functions"
+  FKT AllocationFunction "5.1" "Function for allocation functions"
+END
+
+FESTWERT numericalParameter
+  LANGNAME "Revised numerical parameter"
+  FUNKTION "AdvancedParameterFunction"
+  DISPLAYNAME NumericalDisplayname
+  EINHEIT_W "K"
+  VAR VariantB=32.5
+  WERT 30
+END
+
+FESTWERT stringParameter
+  LANGNAME "Revised string parameter"
+  FUNKTION "AdvancedParameterFunction"
+  DISPLAYNAME StringDisplayname
+  EINHEIT_W "txt"
+  TEXT   "ParameterC"
+END
+
+FESTWERTEBLOCK arrayParameter1D 4
+  LANGNAME "Revised array parameters"
+  FUNKTION "ArrayParameterFunction"
+  DISPLAYNAME ArrayParameterDisplayname
+  EINHEIT_W ""K""
+  WERT    1   0   0.5000   2    
+END
+
+KENNLINIE revisedCurve 8 
+  LANGNAME ""Revised curve""
+  FUNKTION "CurveFunction"
+  DISPLAYNAME CurveDisplayname
+  EINHEIT_X ""min""
+  EINHEIT_W ""K""
+  ST/X   0.5000   1.5000   2.5000   3.5000   4.5000   5.5000   
+  ST/X   6.5000   7.5000   
+  WERT   5   85   125   185   225   265   
+  WERT   305   345   
+END
+
+KENNLINIE staticCurve 6 
+  LANGNAME ""Revised static curve""
+  FUNKTION "StaticCurveFunction"
+  DISPLAYNAME StaticCurveDisplayname
+  EINHEIT_X ""min""
+  EINHEIT_W ""K""
+  ST/X   0.5000   1.5000   2.5000   3.5000   4.5000   5.5000   
+  WERT   50   95   140   185   230   275   
+END
+
+KENNLINIE collectiveCurve 3 
+  LANGNAME ""Revised collective curve""
+  FUNKTION "CollectiveCurveFunction"
+  DISPLAYNAME CollectiveCurveDisplayname
+  EINHEIT_X ""min""
+  EINHEIT_W ""K""
+  ST/X   1.5000   2.5000   3.5000   
+  WERT   -50   -95   -140   
+END
+
+KENNFELD revisedMap 6 2
+  LANGNAME ""Revised map""
+  FUNKTION "MapFunction"
+  DISPLAYNAME MapDisplayname
+  EINHEIT_X ""K""
+  EINHEIT_Y ""m^2/s""
+  EINHEIT_W ""kPa""
+  ST/X   1.5000   2.5000   3.5000   4.5000   5.5000   6.5000
+  ST/Y   1.5
+  WERT   0.5000   0.9000   0.7000   1.5000   1.9000   2.3000
+  ST/Y   2.5
+  WERT   1.5000   2.5000   3.5000   2.5000   3.5000   4.5000
+
+END
+
+KENNFELD staticMap 6 2
+  LANGNAME ""Revised static map""
+  FUNKTION "StaticMapFunction"
+  DISPLAYNAME StaticMapDisplayname
+  EINHEIT_X ""K""
+  EINHEIT_Y ""m^2/s""
+  EINHEIT_W ""kPa""
+  ST/X   1.5000   2.5000   3.5000   4.5000   5.5000   6.5000
+  ST/Y   0.5
+  WERT   0.5000   0.9000   0.7000   1.5000   1.9000   2.3000
+  ST/Y   1.5
+  WERT   1.5000   2.5000   3.5000   2.5000   3.5000   4.5000
+
+END
+
+KENNFELD collectiveMap 6 3
+  LANGNAME ""Revised collective map""
+  FUNKTION "CollectiveMapFunction"
+  DISPLAYNAME CollectiveMapDisplayname
+  EINHEIT_X ""K""
+  EINHEIT_Y ""m^2/s""
+  EINHEIT_W ""kPa""
+  ST/X   1.5000   2.5000   3.5000   4.5000   5.5000   6.5000
+  ST/Y   1.5
+  WERT   1.5000   2.5000   3.5000   2.5000   3.5000   4.5000
+  ST/Y   2.5
+  WERT   2.5000   4.5000   6.5000   3.5000   4.5000   5.5000
+  ST/Y   3.5
+  WERT   3.5000   6.5000   9.5000   7.5000   8.5000   9.5000
+
+END
+
+STUETZSTELLENVERTEILUNG distribution 3 
+  LANGNAME ""Revised distribution""
+  FUNKTION "AllocationFunction"
+  DISPLAYNAME AllocationDisplayname
+  EINHEIT_X ""cm""
+  ST/X   1.5000   2.5000   3.5000   
+END

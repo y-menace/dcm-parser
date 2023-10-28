@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 from typing import List, Union, Optional
 from .attribute_classes import FUNKTIONEN, FESTWERT, FESTWERTEBLOCK, KENNLINIE, FESTKENNLINIE, GRUPPENKENNLINIE
-from .attribute_classes import KENNFELD,FESTKENNFELD, GRUPPENKENNFELD, STUETZSTELLENVERTEILUNG ,DCMObject
+from .attribute_classes import KENNFELD,FESTKENNFELD, GRUPPENKENNFELD, STUETZSTELLENVERTEILUNG 
+from .dcm_object import DCMObject
 import re
-
-
 
 class DCMParser():    
     format_spec_string = 'KONSERVIERUNG_FORMAT'
@@ -43,7 +42,7 @@ class DCMParser():
             content = f.read()
         self.file_raw_content = content
 
-    def parse_dcm(self):
+    def create_dcm_object(self):
         ## get comments , format_spec
         comments,format_spec, rest_data = self.get_comments_and_spec_version()    
         function_chunk = self.chunks_for_type(rest_data,FUNKTIONEN.token_string)
@@ -205,6 +204,4 @@ class DCMParser():
         else:
             if size1:
                 size = [size1]  ## this can be None for things that are size 1
-        return name,size
-        
-
+        return name,size       
