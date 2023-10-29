@@ -14,7 +14,7 @@ FUNKTIONEN
   FKT AllocationFunction "5.1" "Function for allocation functions"
 END
 
-FESTWERT numericalParameter
+FESTWERT parameter
   LANGNAME  "Revised numerical parameter"
   FUNKTION  "AdvancedParameterFunction"
   DISPLAYNAME  NumericalDisplayname
@@ -23,7 +23,7 @@ FESTWERT numericalParameter
   VAR   VariantB=32.5
 END
 
-FESTWERT stringParameter
+FESTWERT parameterText
   LANGNAME  "Revised string parameter"
   FUNKTION  "AdvancedParameterFunction"
   DISPLAYNAME  StringDisplayname
@@ -32,7 +32,7 @@ FESTWERT stringParameter
   VAR   VariantB="ParameterD"
 END
 
-FESTWERTEBLOCK arrayParameter1D 4
+FESTWERTEBLOCK matrix 4
   LANGNAME   "Revised array parameters"
   FUNKTION  "ArrayParameterFunction"
   DISPLAYNAME   ArrayParameterDisplayname
@@ -40,7 +40,7 @@ FESTWERTEBLOCK arrayParameter1D 4
   WERT   1.0 0.0 0.5 2.0
 END
 
-KENNLINIE revisedCurve 8
+KENNLINIE line_curve 8
   LANGNAME  "Revised curve"
   FUNKTION  "CurveFunction"
   DISPLAYNAME  CurveDisplayname
@@ -52,7 +52,7 @@ KENNLINIE revisedCurve 8
   WERT   225.0 265.0 305.0 345.0
 END
 
-FESTKENNLINIE staticCurve 6
+FESTKENNLINIE fixed_line_curve 6
   LANGNAME   "Revised static curve"
   FUNKTION  "StaticCurveFunction"
   DISPLAYNAME  StaticCurveDisplayname
@@ -64,7 +64,7 @@ FESTKENNLINIE staticCurve 6
   WERT   185.0 230.0 275.0
 END
 
-GRUPPENKENNLINIE collectiveCurve 3
+GRUPPENKENNLINIE group_line_curve 3
   LANGNAME  "Revised collective curve"
   FUNKTION  "CollectiveCurveFunction"
   DISPLAYNAME   CollectiveCurveDisplayname
@@ -75,7 +75,7 @@ GRUPPENKENNLINIE collectiveCurve 3
   WERT  -50.0 -95.0 -140.0
 END
 
-KENNFELD revisedMap 6 2
+KENNFELD map 6 2
   LANGNAME  "Revised map"
   FUNKTION  "MapFunction"
   DISPLAYNAME  MapDisplayname
@@ -89,7 +89,7 @@ KENNFELD revisedMap 6 2
   WERT   1.5 2.5 3.5 2.5 3.5 4.5
 END
 
-FESTKENNFELD staticMap 6 2
+FESTKENNFELD static_map 6 2
   LANGNAME   "Revised static map"
   FUNKTION  "StaticMapFunction"
   DISPLAYNAME   StaticMapDisplayname
@@ -103,7 +103,7 @@ FESTKENNFELD staticMap 6 2
   WERT  1.5 2.5 3.5 2.5 3.5 4.5
 END
 
-GRUPPENKENNFELD collectiveMap 6 3
+GRUPPENKENNFELD group_map 6 3
   LANGNAME  "Revised collective map"
   FUNKTION  "CollectiveMapFunction"
   DISPLAYNAME  CollectiveMapDisplayname
