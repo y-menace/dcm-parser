@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="dcmfile-parser",
-    version="0.0.1",
+    version="0.0.2",
     description="parser for dcm files",
     packages=find_packages(where="app"),
     long_description=long_description,

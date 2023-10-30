@@ -1,6 +1,6 @@
 ## Introduction
 
-Parser for DCM files [Data Conversion Format](https://www.etas.com/download-center-files/products_ASCET_Software_Products/TechNote_DCM_File_Formats.pdf ). The package has two main classes `DCMParser` and `DCMObject`, which provide a  toolkit to deal with DCM  files used in automotive software development. While the `DCMParser` is designed to read and interpret DCM files, the `DCMObject` allows for structured representation and manipulation of the parsed data.
+Parser for DCM files Data Conversion Format. The package has two main classes `DCMParser` and `DCMObject`, which provide a  toolkit to deal with DCM  files used in automotive software development. While the `DCMParser` is designed to read and interpret DCM files, the `DCMObject` allows for structured representation and manipulation of the parsed data.
 
 ## Install 
 
