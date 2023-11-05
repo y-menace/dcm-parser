@@ -56,7 +56,7 @@ class BaseParam(Tempaltes):
             return 0
         return abs(a - b) / max(abs(a), abs(b))
 
-    def update_from_and_report_changes(self, other: "BaseParam"):
+    def update_from_and_report_changes(self, other: "BaseParam",diff_mode=False):
         attributes = ['wert', 'size', 'st_x', 'st_y']   ## only these attributes are updated
         changes = {}
 
@@ -66,9 +66,10 @@ class BaseParam(Tempaltes):
                 other_list = getattr(other, attr)
                 
                 # Ensure both lists have the same length, else there might be structural changes.
-                if len(current_list) != len(other_list):
+                if len(current_list) != len(other_list):                    
                     changes[attr] = (current_list, other_list)
-                    setattr(self, attr, other_list)
+                    if diff_mode == False:
+                        setattr(self, attr, other_list)
                     continue
                 
                 updated_list = []
@@ -82,8 +83,8 @@ class BaseParam(Tempaltes):
                             changes[attr] = ([], [])  # Initialize with empty lists
                         changes[attr][0].append(current_value)
                         changes[attr][1].append(other_value)
-
-                setattr(self, attr, updated_list)
+                if diff_mode == False:
+                    setattr(self, attr, updated_list)
 
         return changes
 

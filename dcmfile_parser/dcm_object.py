@@ -77,6 +77,13 @@ class DCMObject():
 
 
     def update_from(self, other: "DCMObject",  delete_list=[], logger=None):
+        self._calc_diff_or_do_update(other,delete_list,logger,diff_mode=False)
+
+    def diff_report(self, other: "DCMObject",  delete_list=[], logger=None):
+        self._calc_diff_or_do_update(other,delete_list,logger,diff_mode=True)
+
+
+    def _calc_diff_or_do_update(self, other: "DCMObject",  delete_list=[], logger=None, diff_mode=False):
         updated_names = []
         
         # Determine the set of names from the current (self) object and the other object
@@ -92,7 +99,7 @@ class DCMObject():
             self_param, _ = self._param_name_dict[name]
             other_param, _ = other._param_name_dict[name]
             if hasattr(self_param, 'update_from_and_report_changes') and hasattr(other_param, 'update_from_and_report_changes'):
-                attributes_changed = self_param.update_from_and_report_changes(other_param)
+                attributes_changed = self_param.update_from_and_report_changes(other_param,diff_mode = diff_mode)
                 if attributes_changed:
                     for attribute, (original_value, updated_value) in attributes_changed.items():
                         if logger:
@@ -104,7 +111,6 @@ class DCMObject():
         self._delete_elements_if_in_list(delete_list,logger,'becuase it was from a higher prio DCM.')
 
         return updated_names, list(missing_names)
-    
 
     def add_new_parameters_from(self, other: "DCMObject", logger=None):
         added_names = []
